@@ -243,8 +243,6 @@ class Dataset_Mode1(Dataset):
         batch = {}
         audio = deepcopy(self.X[index, :, :])
 
-        print(len(audio[0]))
-
         if self.data_augment_target is not None:
             if (
                 self.y[index].argmax(dim=-1, keepdim=False).item()
@@ -270,11 +268,6 @@ class Dataset_Mode1(Dataset):
                 f_min=self.feature_config["f_min"],
                 f_max=self.feature_config["f_max"],
             )
-            # torch.set_printoptions(threshold=100_000)
-            print(feat)
-            print(len(feat))
-            print(len(feat[0]))
-            print(len(feat[0][0]))
         elif self.feature_config["name"] == "mfcc":
             feat = extract_mfcc(
                 audio=audio,

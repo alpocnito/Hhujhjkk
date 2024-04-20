@@ -2,6 +2,7 @@ import argparse
 import os
 import json
 import torch
+import time
 import torch.nn as nn
 import pandas as pd
 from sklearn.metrics import classification_report, accuracy_score, roc_auc_score
@@ -11,6 +12,7 @@ from src.dataset import create_dataloader
 from typing import Dict
 from src.utils import labels_mapping
 from src.processing import processing
+
 
 LABELS = {
     "01": "neutral",
@@ -27,17 +29,18 @@ LABELS = {
 def num_to_str(num: str) -> str:
     return LABELS[num]
 
-if __name__ == "__main__":
+
+def analyse():
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "-c", "--config", required=True, help="the json configuration file path."
+        "-w", required=True, help="wave file path."
     )
     args = parser.parse_args()
-
-    assert os.path.exists(args.config), "Configuration file does not exist!"
+    file = args.w
+    wav_file = os.path.basename(file)
 
     # reading the parameters configuration file
-    params = json.load(open(args.config, "r"))
+    params = json.load(open('config/mode_1.json', "r"))
 
     # parameters defination
     k_fold = None
@@ -65,12 +68,8 @@ if __name__ == "__main__":
     )
 
     fold = 4
-    file = 'data/ravdess/happy.wav'
-
 
     df = pd.DataFrame()
-
-    wav_file = os.path.basename(file)
     label = "neutral"
 
     row = pd.DataFrame(
@@ -125,6 +124,7 @@ if __name__ == "__main__":
     predictions = []
     targets = []
 
+
     with torch.inference_mode():
         for i, batch in enumerate(dataloader):
             data = batch["features"].to(device)
@@ -135,5 +135,8 @@ if __name__ == "__main__":
             prediction = output.detach().cpu().numpy()
             predictions.extend(prediction.tolist())
 
-    for i, score in enumerate(predictions[0]):
-        print(f'{num_to_str(str(i+1).zfill(2)):10} = {score:3.1f}')
+    ret = {num_to_str(str(i+1).zfill(2)): score for i, score in enumerate(predictions[0])}
+    return ret
+
+if __name__ == "__main__":
+    print(analyse())
