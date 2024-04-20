@@ -1,4 +1,4 @@
-FROM continuumio/miniconda3
+FROM continuumio/miniconda3:24.3.0-0
 
 RUN apt update \
     && apt install -y build-essential libsox-dev portaudio19-dev python3-pyaudio \
@@ -27,7 +27,6 @@ COPY ./ser-wavelet/examples ./examples
 COPY ./ser-wavelet/notebooks ./notebooks
 COPY ./ser-wavelet/src ./src
 COPY ./ser-wavelet/checkpoints2 ./checkpoints2
-COPY ./ser-wavelet/features ./features
 
 CMD jupyter notebook \
     --notebook-dir=/opt/notebooks --ip='*' --port=8888 \

@@ -11,8 +11,6 @@ services:
       - USER=${USER:-ron}
     volumes:
       - ./ser-wavelet:/opt/notebooks/ser-wavelet
-    devices:
-      - /dev/snd:/dev/snd
     networks:
       - my-network
   

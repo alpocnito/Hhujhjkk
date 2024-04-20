@@ -42,15 +42,6 @@ if __name__ == "__main__":
     # parameters defination
     k_fold = None
 
-    if params["dataset"].lower() == "coraa":
-        max_seconds = 16
-    elif params["dataset"].lower() == "emodb":
-        max_seconds = 10
-    elif params["dataset"].lower() == "ravdess":
-        max_seconds = 6
-    elif params["dataset"].lower() == "savee":
-        max_seconds = 8
-
     if "kfold" in params.keys():
         k_fold = params["kfold"]["num_k"]
 
